@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "XTLMI/bHrDnvVdUKnqUQZgvr4nHTGTV5IXqCRlVYsus=",
+  "Source": "wms-backend",
+  "BasePath": "_content/wms-backend",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
