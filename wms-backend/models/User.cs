@@ -1,32 +1,36 @@
 using System.ComponentModel.DataAnnotations;
 
 namespace SmartStocks.Models {
-    public class User {
-        public int Id { get; set; }
+    public class User
+    {
+        public Guid Id { get; set; }
         [Required]
-        [StringLength(20)]
-        public string firstName { get; set; } = string.Empty;
+        [StringLength(255)]
+        public string FirstName { get; set; } = string.Empty;
         [Required]
-        [StringLength(20)]
-        public string lastdName { get; set; } = string.Empty;
+        [StringLength(255)]
+        public string LastName { get; set; } = string.Empty;
         [Required]
         [EmailAddress]
-        [StringLength(50)]
-        public string email { get; set; } = string.Empty;
+        [StringLength(255)]
+        public string Email { get; set; } = string.Empty;
         [Required]
-        [StringLength(50)]
-        public string password { get; set; } = string.Empty;
+        [StringLength(255, MinimumLength = 8)]
+        public string Password { get; set; } = string.Empty;
         [Required]
-        [StringLength(10)]
-        public UserRole role { get; set; } = UserRole.Employee;
+        [StringLength(255)]
+        public UserRole Role { get; set; } = UserRole.Employee;
 
-        public int? StoreId { get; set; }
+        public Guid? StoreId { get; set; }
         public Store? Store { get; set; } = null!;
 
-        public ICollection<UserStores> UserStores { get; set; } = new List<UserStores>();
+        public ICollection<User> UserStores { get; set; } = new List<User>();
 
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;  
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime? UpdatedAt { get; set; }
+
+        public string? RefreshToken { get; set; }
+        public DateTime? RefreshTokenExpiryTime { get; set; }
 
     }
     public enum UserRole
