@@ -2,12 +2,12 @@ using System.ComponentModel.DataAnnotations;
 
 namespace SmartStocks.Models {
     public class Stock {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
-        public int ProductId { get; set; }
+        public Guid ProductId { get; set; }
         public Product Product { get; set; } = null!;
 
-        public int StoreId { get; set; }
+        public Guid StoreId { get; set; }
         public Store Store { get; set; } = null!;
 
         [Required]
