@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("wms-backend")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b8d7cd2d7cf48bcc48036569c54d3dd092901b3c")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+925bbfe44cc880b62459418b6aba6db3c6393e8e")]
 [assembly: System.Reflection.AssemblyProductAttribute("wms-backend")]
 [assembly: System.Reflection.AssemblyTitleAttribute("wms-backend")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

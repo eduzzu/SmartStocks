@@ -6,7 +6,7 @@ using SmartStocks.Models;
 
 namespace SmartStocks.Services;
 
-public class AuthService(AppDbContext appDbContext, TokenGenerator tokenGenerator) : IAuthService
+public class AuthService(AppDbContext appDbContext, TokenGenerator tokenGenerator, IEmailService emailService) : IAuthService
 {
     public async Task<TokenResponse?> Login(Login request)
     {
@@ -23,7 +23,7 @@ public class AuthService(AppDbContext appDbContext, TokenGenerator tokenGenerato
     {
         return new TokenResponse
         {
-            AccessToken = tokenGenerator.GenerateToken(user.Id, user.Email),
+            AccessToken = tokenGenerator.GenerateToken(user.Id, user.Email, user.Role.ToString()),
             RefreshToken = await GenerateAndSaveRefreshToken(user)
         };
     }
@@ -76,7 +76,7 @@ public class AuthService(AppDbContext appDbContext, TokenGenerator tokenGenerato
         {
             return null;
         }
-        
+
         return user;
     }
 
@@ -86,4 +86,41 @@ public class AuthService(AppDbContext appDbContext, TokenGenerator tokenGenerato
         if (user is null) return null;
         return await CreateTokenResponse(user);
     }
+    
+    public async Task<bool> SendResetPasswordEmail(string email)
+{
+    var user = await appDbContext.Users.FirstOrDefaultAsync(u => u.Email == email);
+    if (user == null)
+        return false;
+
+    user.ResetPasswordToken = Guid.NewGuid().ToString();
+    user.ResetPasswordTokenExpires = DateTime.UtcNow.AddHours(1);
+
+    await appDbContext.SaveChangesAsync();
+
+    var resetLink = $"http://localhost:5051/auth/reset-password?token={user.ResetPasswordToken}";
+    var emailBody = $"Click <a href='{resetLink}'>here</a> to change your password. This link expires in an hour.";
+
+    await emailService.SendEmail(user.Email, "Reset password", emailBody);
+
+    return true;
+}
+
+public async Task<bool> ResetPassword(string token, string newPassword)
+{
+    var user = await appDbContext.Users.FirstOrDefaultAsync(u =>
+        u.ResetPasswordToken == token && u.ResetPasswordTokenExpires > DateTime.UtcNow);
+
+    if (user == null)
+        return false;
+
+    user.Password = new PasswordHasher<User>()
+            .HashPassword(user, newPassword);
+    user.ResetPasswordToken = null;
+    user.ResetPasswordTokenExpires = null;
+
+    await appDbContext.SaveChangesAsync();
+
+    return true;
+}
 }
